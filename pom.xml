@@ -2,12 +2,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.hspconsortium.reference</groupId>
-        <artifactId>hspc-reference-release-spring-boot</artifactId>
-        <version>0.2</version>
+        <groupId>org.hspconsortium.release</groupId>
+        <artifactId>hspc-release</artifactId>
+        <version>0.5</version>
     </parent>
 
-    <groupId>org.hspconsortium.patientPicker</groupId>
+    <groupId>org.hspconsortium.patientpicker</groupId>
     <artifactId>hspc-patient-picker</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>war</packaging>
@@ -24,12 +24,9 @@
     </scm>
 
     <properties>
-        <java.version>1.7</java.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
-
-    <dependencies>
-
-    </dependencies>
 
     <build>
         <finalName>${project.artifactId}</finalName>
@@ -44,9 +41,6 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
-            <plugin>
-                <artifactId>maven-war-plugin</artifactId>
             </plugin>
         </plugins>
     </build>
