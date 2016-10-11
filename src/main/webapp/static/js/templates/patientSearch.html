@@ -1,0 +1,48 @@
+<div id="patient-results" ng-controller="PatientSearchController">
+    <div class="box">
+    <div class="row">
+        <div class="col-md-12 content-column-vertical">
+            <div class="pull-left basic-text">Search for patients by name</div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <input
+                    id="patient-search"
+                    class="col-md-12 pull-left input-long basic-text"
+                    type="text"
+                    autofocus
+                    contenteditable
+                    focus-on-key="191"
+                    ng-model="searchterm"
+                    placeholder="john smith ..."/>
+        </div>
+    </div>
+    <div class="row table-container">
+        <div class="col-md-12 result">
+            <div id="patient-results-list" ng-cloak when-scrolling="loadMoreIfNeeded()">
+                <table class="table table-striped table-hover">
+                    <tr class="patient-row" ng-click="select($index)" ng-repeat="patient in patients" ng-class="{selected : patient === selected.selectedPatient}">
+                        <td class="gender"
+                            ng-bind-html="genderglyph[patient.gender]"></td>
+                        <td class="name">
+                            <span ng-bind="patient | nameFamilyGiven"></span>
+                        </td>
+                        <td>
+                            <i ng-bind="patient.birthDate | date:'MMM d, y'"></i>
+                        </td>
+                    </tr>
+                </table>
+
+                <div ng-show="!showing.searchloading && (patients.length==0)">
+                    <p>No matches, try broadening your search.</p>
+                </div>
+
+                <div id="loading-patient-results" ng-show="showing.searchloading" class="ng-hide">
+                    <p>Loading...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
