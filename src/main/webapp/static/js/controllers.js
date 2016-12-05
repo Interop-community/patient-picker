@@ -83,7 +83,7 @@ angular.module('patientPickerApp.controllers', []).controller('navController',
 
         var loadCount = 0;
         var search = _.debounce(function(thisLoad){
-            fhirApiServices.queryResourceInstances("Patient", undefined, $scope.tokens, [['family','asc'],['given','asc']])
+            fhirApiServices.queryResourceInstances("Patient", $scope.patientQuery, $scope.tokens, [['family','asc'],['given','asc']])
                 .then(function(p, queryResult){
                     lastQueryResult = queryResult;
                     if (thisLoad < loadCount) {   // not sure why this is needed (pp)
@@ -102,10 +102,6 @@ angular.module('patientPickerApp.controllers', []).controller('navController',
             search(++loadCount);
         };
 
-        $rootScope.$on('patient-created', function(){
-            $scope.getMore();
-        });
-
     }).controller("BindContextController",
     function($scope, fhirApiServices, $stateParams, oauth2, tools) {
 
@@ -117,8 +113,12 @@ angular.module('patientPickerApp.controllers', []).controller('navController',
 
         $scope.selected = {
             selectedPatient: {},
-            patientSelected: false
+            patientSelected: false,
+            preLaunch: false
         };
+
+        $scope.patientQuery = undefined;
+
 
         if (fhirApiServices.clientInitialized()) {
             // all is good
@@ -131,17 +131,46 @@ angular.module('patientPickerApp.controllers', []).controller('navController',
         $scope.clientName = decodeURIComponent($stateParams.clientName)
             .replace(/\+/, " ");
 
+        if ($stateParams.patients !== undefined) {
+            $scope.selected.preLaunch = true;
+            $scope.patientQuery = {};
+            var queryString = decodeURIComponent($stateParams.patients);
+            if (queryString !== "none") {
+                // For now the query should only be a Patient query.
+                // In the future this query maybe more complex ex. Observations with high blood pressure, where
+                // we would display the Patient who are references in the Observations
+                if (queryString.startsWith("Patient?")) {
+                    queryString = queryString.substr("Patient?".length);
+                    var queryItems = queryString.split("&");
+                    angular.forEach(queryItems, function (item) {
+                        var parts = item.split("=");
+                        $scope.patientQuery[parts[0]] = parts[1];
+                    });
+                }
+            } else {
+                var to = decodeURIComponent($stateParams.endpoint);
+                return window.location = to + "?patient_id=none&iss=" + $stateParams.iss + "&launch_uri=" + $stateParams.launch_uri + "&context_params=" + $stateParams.context_params;
+            }
+        }
+
         $scope.onSelected = $scope.onSelected || function(p){
             var pid = p.id;
             var client_id = tools.decodeURLParam($stateParams.endpoint, "client_id");
 
-            fhirApiServices
-                .registerContext({ client_id: client_id}, {patient: pid})
-                .then(function(c){
-                    var to = decodeURIComponent($stateParams.endpoint);
-                    to = to.replace(/scope=/, "launch="+c.launch_id+"&scope=");
-                    return window.location = to;
-                });
+            // Pre Launch is for the mock launch flow
+            if ( $scope.selected.preLaunch ) {
+                var to = decodeURIComponent($stateParams.endpoint);
+                return window.location = to + "?patient_id=" + pid + "&iss=" + $stateParams.iss + "&launch_uri=" + $stateParams.launch_uri + "&context_params=" + $stateParams.context_params;
+            } else {
+
+                fhirApiServices
+                    .registerContext({client_id: client_id}, {patient: pid})
+                    .then(function (c) {
+                        var to = decodeURIComponent($stateParams.endpoint);
+                        to = to.replace(/scope=/, "launch=" + c.launch_id + "&scope=");
+                        return window.location = to;
+                    });
+            }
         };
     });
 
