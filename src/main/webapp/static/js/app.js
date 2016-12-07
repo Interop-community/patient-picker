@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('patientPickerApp', ['ui.router', 'ngSanitize', 'patientPickerApp.filters', 'patientPickerApp.services',
+angular.module('patientPickerApp', ['ui.router', 'ngSanitize', 'ui.bootstrap', 'patientPickerApp.filters', 'patientPickerApp.services',
     'patientPickerApp.controllers'], function($stateProvider, $urlRouterProvider ){
 
     $urlRouterProvider.otherwise('/resolve');

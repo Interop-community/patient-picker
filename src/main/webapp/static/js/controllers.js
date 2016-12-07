@@ -1,35 +1,44 @@
 'use strict';
 
 angular.module('patientPickerApp.controllers', []).controller('navController',
-    function($rootScope, $scope) {
+    function ($rootScope, $scope) {
 
         $scope.title = {blueBarTitle: "Patient Picker"};
 
     }).controller("AfterAuthController", // After auth
-        function(fhirApiServices){
-            fhirApiServices.initClient();
+    function (fhirApiServices) {
+        fhirApiServices.initClient();
     }).controller("PatientSearchController",
-    function($scope, $rootScope, $state, $filter, $stateParams, fhirApiServices) {
+    function ($scope, $rootScope, $state, $filter, $stateParams, fhirApiServices, $uibModal) {
 
-        $scope.onSelected = $scope.onSelected || function(p){
-            if ($scope.selected.selectedPatient !== p) {
-                $scope.selected.selectedPatient = p;
-                $scope.selected.patientSelected = true;
-            }
-        };
+        $scope.onSelected = $scope.onSelected || function (p) {
+                if ($scope.selected.selectedPatient !== p) {
+                    $scope.selected.selectedPatient = p;
+                    $scope.selected.patientSelected = true;
+                }
+            };
+
+        var natural = true;
+        var inverse = false;
+        $scope.sortMap = new Map();
+        $scope.sortMap.set("gender", [['gender', natural]]);
+        $scope.sortMap.set("name", [['family', natural], ['given', natural]]);
+        $scope.sortMap.set("age", [['birthdate', inverse]]);
+        $scope.sortSelected = "name";
+        $scope.sortReverse = false;
 
         $scope.mayLoadMore = true;
         $scope.patients = [];
-        $scope.genderglyph = {"female" : "&#9792;", "male": "&#9794;"};
+        $scope.genderglyph = {"female": "&#9792;", "male": "&#9794;"};
         $scope.searchterm = "";
         var lastQueryResult;
 
-        $rootScope.$on('set-loading', function(){
+        $rootScope.$on('set-loading', function () {
             $scope.showing.searchloading = true;
         });
 
         /** Checks if the patient list div is (almost) fully visible on screen and if so loads more patients. */
-        $scope.loadMoreIfNeeded = function() {
+        $scope.loadMoreIfNeeded = function () {
             if (!$scope.mayLoadMore) {
                 return;
             }
@@ -44,17 +53,19 @@ angular.module('patientPickerApp.controllers', []).controller('navController',
             }
         };
 
-        $scope.loadMoreIfHasMore = function() {
+        $scope.loadMoreIfHasMore = function () {
             if ($scope.hasNext()) {
                 $scope.loadMore();
             }
         };
 
-        $scope.loadMore = function() {
+        $scope.loadMore = function () {
             $scope.showing.searchloading = true;
-            fhirApiServices.getNextOrPrevPage("nextPage", lastQueryResult).then(function(p, queryResult){
+            fhirApiServices.getNextOrPrevPage("nextPage", lastQueryResult).then(function (p, queryResult) {
                 lastQueryResult = queryResult;
-                p.forEach(function(v) { $scope.patients.push(v) }, p);
+                p.forEach(function (v) {
+                    $scope.patients.push(v)
+                }, p);
                 $scope.showing.searchloading = false;
                 $scope.mayLoadMore = true;
                 $scope.loadMoreIfNeeded();
@@ -62,17 +73,17 @@ angular.module('patientPickerApp.controllers', []).controller('navController',
             });
         };
 
-        $scope.select = function(i){
+        $scope.select = function (i) {
             $scope.onSelected($scope.patients[i]);
         };
 
-        $scope.hasNext = function(){
+        $scope.hasNext = function () {
             return fhirApiServices.hasNext(lastQueryResult);
         };
 
-        $scope.$watch("searchterm", function(){
+        $scope.$watchGroup(["searchterm", "sortSelected", "sortReverse"], function () {
             var tokens = [];
-            ($scope.searchterm || "").split(/\s/).forEach(function(t){
+            ($scope.searchterm || "").split(/\s/).forEach(function (t) {
                 tokens.push(t.toLowerCase());
             });
             $scope.tokens = tokens;
@@ -82,9 +93,25 @@ angular.module('patientPickerApp.controllers', []).controller('navController',
         });
 
         var loadCount = 0;
-        var search = _.debounce(function(thisLoad){
-            fhirApiServices.queryResourceInstances("Patient", $scope.patientQuery, $scope.tokens, [['family','asc'],['given','asc']])
-                .then(function(p, queryResult){
+        var search = _.debounce(function (thisLoad) {
+            var sortDefs = $scope.sortMap.get($scope.sortSelected);
+            var sortValues = [];
+            for (var i=0;i<sortDefs.length;i++) {
+                sortValues[i] = [];
+                sortValues[i][0] = sortDefs[i][0];
+                if (sortDefs[i][1]) {
+                    // natural
+                    sortValues[i][1] = ($scope.sortReverse ? "desc" : "asc");
+                } else {
+                    // inverted
+                    sortValues[i][1] = ($scope.sortReverse ? "asc" : "desc");
+                }
+            }
+
+            var modalProgress = openModalProgressDialog("Searching...");
+
+            fhirApiServices.queryResourceInstances("Patient", $scope.patientQuery, $scope.tokens, sortValues)
+                .then(function (p, queryResult) {
                     lastQueryResult = queryResult;
                     if (thisLoad < loadCount) {   // not sure why this is needed (pp)
                         return;
@@ -94,16 +121,36 @@ angular.module('patientPickerApp.controllers', []).controller('navController',
                     $scope.mayLoadMore = true;
                     $scope.loadMoreIfNeeded();
                     $rootScope.$digest();
+
+                    modalProgress.dismiss();
                 });
         }, 300);
 
-        $scope.getMore = function(){
+        $scope.getMore = function () {
             $scope.showing.searchloading = true;
             search(++loadCount);
         };
 
-    }).controller("BindContextController",
-    function($scope, fhirApiServices, $stateParams, oauth2, tools) {
+        function openModalProgressDialog(title) {
+            return $uibModal.open({
+                animation: true,
+                templateUrl: 'static/js/templates/progressModal.html',
+                controller: 'ProgressModalCtrl',
+                size: 'sm',
+                resolve: {
+                    getTitle: function () {
+                        return title;
+                    }
+                }
+            });
+        }
+    }).controller('ProgressModalCtrl',['$scope', '$uibModalInstance', "getTitle",
+    function ($scope, $uibModalInstance, getTitle) {
+
+        $scope.title = getTitle;
+
+    }]).controller("BindContextController",
+    function ($scope, fhirApiServices, $stateParams, oauth2, tools) {
 
         $scope.showing = {
             noPatientContext: true,
@@ -153,24 +200,24 @@ angular.module('patientPickerApp.controllers', []).controller('navController',
             }
         }
 
-        $scope.onSelected = $scope.onSelected || function(p){
-            var pid = p.id;
-            var client_id = tools.decodeURLParam($stateParams.endpoint, "client_id");
+        $scope.onSelected = $scope.onSelected || function (p) {
+                var pid = p.id;
+                var client_id = tools.decodeURLParam($stateParams.endpoint, "client_id");
 
-            // Pre Launch is for the mock launch flow
-            if ( $scope.selected.preLaunch ) {
-                var to = decodeURIComponent($stateParams.endpoint);
-                return window.location = to + "?patient_id=" + pid + "&iss=" + $stateParams.iss + "&launch_uri=" + $stateParams.launch_uri + "&context_params=" + $stateParams.context_params;
-            } else {
+                // Pre Launch is for the mock launch flow
+                if ($scope.selected.preLaunch) {
+                    var to = decodeURIComponent($stateParams.endpoint);
+                    return window.location = to + "?patient_id=" + pid + "&iss=" + $stateParams.iss + "&launch_uri=" + $stateParams.launch_uri + "&context_params=" + $stateParams.context_params;
+                } else {
 
-                fhirApiServices
-                    .registerContext({client_id: client_id}, {patient: pid})
-                    .then(function (c) {
-                        var to = decodeURIComponent($stateParams.endpoint);
-                        to = to.replace(/scope=/, "launch=" + c.launch_id + "&scope=");
-                        return window.location = to;
-                    });
-            }
-        };
+                    fhirApiServices
+                        .registerContext({client_id: client_id}, {patient: pid})
+                        .then(function (c) {
+                            var to = decodeURIComponent($stateParams.endpoint);
+                            to = to.replace(/scope=/, "launch=" + c.launch_id + "&scope=");
+                            return window.location = to;
+                        });
+                }
+            };
     });
 
