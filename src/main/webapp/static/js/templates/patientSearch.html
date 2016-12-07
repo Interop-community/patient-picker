@@ -4,7 +4,6 @@
 
         <div class="col-md-10">
 
-            <!--<div class="slim-page-header">Choose a patient</div>-->
             <div class="row">
                 <div class="slim-page-header">Choose a patient</div>
             </div>
@@ -30,17 +29,18 @@
                     <table class="table table-striped table-hover">
                         <thead>
                         <tr>
-                            <td>
-                                <a href="#" ng-click="sortSelected='gender'; sortReverse = !sortReverse;">
-                                    Gender
-                                    <span ng-show="sortSelected == 'gender' && !sortReverse;"
+                            <td ng-show="showPatientId">
+                                <a href="#"
+                                   ng-click="toggleSort('id');">
+                                    Patient Id
+                                    <span ng-show="sortSelected == 'id' && !sortReverse;"
                                           class="glyphicon glyphicon-sort-by-attributes"></span>
-                                    <span ng-show="sortSelected == 'gender' && sortReverse;"
+                                    <span ng-show="sortSelected == 'id' && sortReverse;"
                                           class="glyphicon glyphicon-sort-by-attributes-alt"></span>
                                 </a>
                             </td>
                             <td>
-                                <a href="#" ng-click="sortSelected='name'; sortReverse = !sortReverse;">
+                                <a href="#" ng-click="toggleSort('name')">
                                     Name
                                     <span ng-show="sortSelected == 'name' && !sortReverse;"
                                           class="glyphicon glyphicon-sort-by-attributes"></span>
@@ -49,7 +49,16 @@
                                 </a>
                             </td>
                             <td>
-                                <a href="#" ng-click="sortSelected='age'; sortReverse = !sortReverse;">
+                                <a href="#" ng-click="toggleSort('gender');">
+                                    Gender
+                                    <span ng-show="sortSelected == 'gender' && !sortReverse;"
+                                          class="glyphicon glyphicon-sort-by-attributes"></span>
+                                    <span ng-show="sortSelected == 'gender' && sortReverse;"
+                                          class="glyphicon glyphicon-sort-by-attributes-alt"></span>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="#" ng-click="toggleSort('age');">
                                     Age
                                     <span ng-show="sortSelected == 'age' && !sortReverse;"
                                           class="glyphicon glyphicon-sort-by-attributes"></span>
@@ -59,13 +68,15 @@
                             </td>
                         </tr>
                         </thead>
-                        <tr class="patient-row" ng-click="select($index)"
-                            ng-repeat="patient in patients | orderBy:sortSelected"
+                        <tr class="patient-row" ng-click="select($index)" ng-repeat="patient in patients"
                             ng-class="{selected : patient === selected.selectedPatient}">
-                            <td class="gender"
-                                ng-bind-html="genderglyph[patient.gender]"></td>
+                            <td ng-show="showPatientId">
+                                <span ng-bind="patient.id"></span>
+                            </td>
                             <td class="name">
                                 <span ng-bind="patient | nameFamilyGiven"></span>
+                            </td>
+                            <td class="gender" ng-bind-html="patient.gender | capFilter">
                             </td>
                             <td>
                                 <i ng-bind="patient.birthDate | ageFilter "></i>

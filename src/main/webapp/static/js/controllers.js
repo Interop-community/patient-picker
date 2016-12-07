@@ -21,6 +21,7 @@ angular.module('patientPickerApp.controllers', []).controller('navController',
         var natural = true;
         var inverse = false;
         $scope.sortMap = new Map();
+        $scope.sortMap.set("id", [['_id', natural]]);
         $scope.sortMap.set("gender", [['gender', natural]]);
         $scope.sortMap.set("name", [['family', natural], ['given', natural]]);
         $scope.sortMap.set("age", [['birthdate', inverse]]);
@@ -131,6 +132,11 @@ angular.module('patientPickerApp.controllers', []).controller('navController',
             search(++loadCount);
         };
 
+        $scope.toggleSort = function (field) {
+            $scope.sortReverse = ($scope.sortSelected == field ? !$scope.sortReverse : false);
+            $scope.sortSelected = field;
+        }
+
         function openModalProgressDialog(title) {
             return $uibModal.open({
                 animation: true,
@@ -166,6 +172,19 @@ angular.module('patientPickerApp.controllers', []).controller('navController',
 
         $scope.patientQuery = undefined;
 
+        function parseContextParams(contextParams) {
+            var decoded = decodeURIComponent(contextParams);
+            var paramPairs = decoded.split(",");
+            var map = {};
+            for (var i = 0; i < paramPairs.length; i++) {
+                var parts = paramPairs[i].split('=');
+                map[parts[0]] = parts[1];
+            }
+            return map;
+        }
+
+        var showPatientIdStr = parseContextParams($stateParams.context_params)["show_patient_id"];
+        $scope.showPatientId = (showPatientIdStr != null && showPatientIdStr == "true");
 
         if (fhirApiServices.clientInitialized()) {
             // all is good

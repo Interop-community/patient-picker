@@ -61,5 +61,8 @@ angular.module('patientPickerApp.filters', []).filter('formatAttribute', functio
             .replace("a ", "1 ")
             .replace(/minutes?/, "min");
     }
+}).filter('capFilter', function () {
+    return function(input) {
+        return (!!input) ? input.charAt(0).toUpperCase() + input.substr(1).toLowerCase() : '';
+    }
 });
-
