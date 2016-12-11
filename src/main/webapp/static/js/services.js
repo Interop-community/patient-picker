@@ -110,6 +110,19 @@ angular.module('patientPickerApp.services', [])
                 }
                 return hasLink;
             },
+            hasPrev: function(lastSearch) {
+                var hasLink = false;
+                if (lastSearch  === undefined) {
+                    return false;
+                } else {
+                    lastSearch.data.link.forEach(function(link) {
+                        if (link.relation == "previous") {
+                            hasLink = true;
+                        }
+                    });
+                }
+                return hasLink;
+            },
             getNextOrPrevPage: function(direction, lastSearch) {
                 var deferred = $.Deferred();
                 $.when(fhirClient.api[direction]({bundle: lastSearch.data}))
@@ -220,4 +233,10 @@ angular.module('patientPickerApp.services', [])
         }
     };
 
-});
+}).factory('branded', ['brandedText', 'envInfo',function(brandedText, envInfo)  {
+    var text = brandedText["smart"];
+    if (envInfo.hostOrg !== undefined && envInfo.hostOrg !== "null") {
+        text = brandedText[envInfo.hostOrg];
+    }
+    return text;
+}]);

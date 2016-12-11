@@ -49,7 +49,7 @@
 </head>
 
 <!-- apply our angular app to our site -->
-<body ng-app="patientPickerApp" ng-class="scrollScreen(400, 1200) ? 'full-screen-scroll' : 'full-screen'" screen-size ng-controller="navController">
+<body ng-app="patientPickerApp" ng-class="scrollScreen(700, 700) ? 'full-screen-scroll' : 'full-screen'" screen-size ng-controller="navController">
 
 <div class="blue-bar">
     <div class="blue-bar-title" ng-cloak>{{title.blueBarTitle}}</div>
@@ -57,26 +57,12 @@
 
 <div ui-view></div>
 
-<footer>
+<!--<footer>-->
+<footer resize ng-style="{position: scrollHeight(700) ? 'relative' : 'absolute'}">
     <div class="container">
-        <div class="copyright">
-            © 2016 by Healthcare Services Platform Consortium
-            <!-- Begin DigiCert site seal HTML and JavaScript -->
-            <div class="site-seal">
-                <div id="DigiCertClickID_YT4mvfuq" data-language="en">
-                    <!--<a href="https://www.digicert.com/wildcard-ssl-certificates.htm">Wildcard SSL Certificate</a>-->
-                </div>
-                <script type="text/javascript">
-                    var __dcid = __dcid || [];__dcid.push(["DigiCertClickID_YT4mvfuq", "3", "m", "black", "YT4mvfuq"]);
-                    (function(){var cid=document.createElement("script");
-                        cid.async=true;
-                        cid.src="//seal.digicert.com/seals/cascade/seal.min.js";
-                        var s = document.getElementsByTagName("script");
-                        var ls = s[(s.length - 1)];ls.parentNode.insertBefore(cid, ls.nextSibling);
-                    }());
-                </script>
-                <!-- End DigiCert site seal HTML and JavaScript -->
-            </div>
+        <div class="copyright" ng-cloak resize ng-style="{textAlign: scrollWidth(750) ? 'left' : 'center', marginLeft: showCert ? '100px' : '0px'}">
+            {{copyright}}
+            <div ng-show="showCert" class="site-seal" ng-include src="'static/js/templates/certificate.html'"></div>
         </div>
     </div>
 </footer>
@@ -96,6 +82,10 @@
 <script src="static/js/controllers.js"></script>
 <script src="static/js/services.js"></script>
 <script src="static/js/filters.js"></script>
+<script src="static/js/directives.js"></script>
+<script src="static/js/branding/env-info.jsp" type="application/javascript"></script>
+<script src="static/js/branding/branded_text.js"></script>
+
 
 </body>
 </html>

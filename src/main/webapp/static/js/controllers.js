@@ -1,9 +1,11 @@
 'use strict';
 
 angular.module('patientPickerApp.controllers', []).controller('navController',
-    function ($rootScope, $scope) {
+    function ($rootScope, $scope, branded) {
 
-        $scope.title = {blueBarTitle: "Patient Picker"};
+        $scope.title = {blueBarTitle: branded.mainTitle};
+        $scope.copyright = branded.copyright;
+        $scope.showCert = branded.showCert;
 
     }).controller("AfterAuthController", // After auth
     function (fhirApiServices) {
@@ -28,7 +30,6 @@ angular.module('patientPickerApp.controllers', []).controller('navController',
         $scope.sortSelected = "name";
         $scope.sortReverse = false;
 
-        $scope.mayLoadMore = true;
         $scope.patients = [];
         $scope.genderglyph = {"female": "&#9792;", "male": "&#9794;"};
         $scope.searchterm = "";
@@ -38,44 +39,26 @@ angular.module('patientPickerApp.controllers', []).controller('navController',
             $scope.showing.searchloading = true;
         });
 
-        /** Checks if the patient list div is (almost) fully visible on screen and if so loads more patients. */
-        $scope.loadMoreIfNeeded = function () {
-            if (!$scope.mayLoadMore) {
-                return;
-            }
-
-            // Normalize scrollTop to account for variations in browser behavior (NJS 2015-03-04)
-            var scrollTop = (document.documentElement.scrollTop > document.body.scrollTop) ? document.documentElement.scrollTop : document.body.scrollTop;
-
-            var list = $('#patient-results');
-            if (list.offset().top + list.height() - 200 - scrollTop <= window.innerHeight) {
-                $scope.mayLoadMore = false;
-                $scope.loadMoreIfHasMore();
-            }
-        };
-
-        $scope.loadMoreIfHasMore = function () {
-            if ($scope.hasNext()) {
-                $scope.loadMore();
-            }
-        };
-
-        $scope.loadMore = function () {
+        $scope.loadMore = function (direction) {
             $scope.showing.searchloading = true;
-            fhirApiServices.getNextOrPrevPage("nextPage", lastQueryResult).then(function (p, queryResult) {
+            var modalProgress = openModalProgressDialog("Searching...");
+
+            fhirApiServices.getNextOrPrevPage(direction, lastQueryResult).then(function (p, queryResult) {
                 lastQueryResult = queryResult;
-                p.forEach(function (v) {
-                    $scope.patients.push(v)
-                }, p);
+                $scope.patients = p;
                 $scope.showing.searchloading = false;
-                $scope.mayLoadMore = true;
-                $scope.loadMoreIfNeeded();
                 $rootScope.$digest();
+
+                modalProgress.dismiss();
             });
         };
 
         $scope.select = function (i) {
             $scope.onSelected($scope.patients[i]);
+        };
+
+        $scope.hasPrev = function () {
+            return fhirApiServices.hasPrev(lastQueryResult);
         };
 
         $scope.hasNext = function () {
@@ -111,7 +94,7 @@ angular.module('patientPickerApp.controllers', []).controller('navController',
 
             var modalProgress = openModalProgressDialog("Searching...");
 
-            fhirApiServices.queryResourceInstances("Patient", $scope.patientQuery, $scope.tokens, sortValues)
+            fhirApiServices.queryResourceInstances("Patient", $scope.patientQuery, $scope.tokens, sortValues, 10)
                 .then(function (p, queryResult) {
                     lastQueryResult = queryResult;
                     if (thisLoad < loadCount) {   // not sure why this is needed (pp)
@@ -120,12 +103,11 @@ angular.module('patientPickerApp.controllers', []).controller('navController',
                     $scope.patients = p;
                     $scope.showing.searchloading = false;
                     $scope.mayLoadMore = true;
-                    $scope.loadMoreIfNeeded();
                     $rootScope.$digest();
 
                     modalProgress.dismiss();
                 });
-        }, 300);
+        }, 600);
 
         $scope.getMore = function () {
             $scope.showing.searchloading = true;
@@ -135,7 +117,7 @@ angular.module('patientPickerApp.controllers', []).controller('navController',
         $scope.toggleSort = function (field) {
             $scope.sortReverse = ($scope.sortSelected == field ? !$scope.sortReverse : false);
             $scope.sortSelected = field;
-        }
+        };
 
         function openModalProgressDialog(title) {
             return $uibModal.open({

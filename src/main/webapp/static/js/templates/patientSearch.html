@@ -2,7 +2,8 @@
     <div class="row">
         <div class="col-md-1"></div>
 
-        <div class="col-md-10">
+        <div class="col-md-10" style="padding-left: 50px; padding-right: 50px; height: 570px">
+        <!--<div class="col-md-10" style="padding-left: 50px; padding-right: 50px" resize ng-style="resizeWithOffset(120)">-->
 
             <div class="row">
                 <div class="slim-page-header">Choose a patient</div>
@@ -15,7 +16,7 @@
             <div class="row">
                 <input
                         id="patient-search"
-                        class="col-md-12 pull-left input-long basic-text"
+                        class="input-long basic-text"
                         type="text"
                         autofocus
                         contenteditable
@@ -24,8 +25,8 @@
                         placeholder="john smith ..."/>
             </div>
 
-            <div class="row table-container box" ng-show="!showing.searchloading">
-                <div id="patient-results-list" ng-cloak when-scrolling="loadMoreIfNeeded()">
+            <div class="row table-container box" style="height: 410px">
+                <div id="patient-results-list" ng-cloak>
                     <table class="table table-striped table-hover">
                         <thead>
                         <tr>
@@ -89,6 +90,10 @@
                     </div>
                 </div>
 
+            </div>
+            <div class="col-md-12 content-column">
+                <div ng-show="hasPrev()" class="btn btn-basic btn-md" style="float: left" ng-click="loadMore('prevPage')"><i class="fa fa-chevron-left fa-lg"></i> Prev</div>
+                <div ng-show="hasNext()" class="btn btn-basic btn-md" style="float: right" ng-click="loadMore('nextPage')"><i class="fa fa-chevron-right fa-lg"></i> Next</div>
             </div>
 
         </div>

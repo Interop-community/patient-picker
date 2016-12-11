@@ -21,7 +21,8 @@
 .full-screen-scroll {
     /*font-family: Open Sans,sans-serif;*/
     color: #666666;
-    overflow: auto;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
 .create-form {
@@ -1062,6 +1063,7 @@ a.disabled {
 }
 
 .input-long {
+    width: 100%;
     border-radius: 4px;
     margin-bottom: 5px
 }
