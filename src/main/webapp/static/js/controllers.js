@@ -102,7 +102,6 @@ angular.module('patientPickerApp.controllers', []).controller('navController',
                     }
                     $scope.patients = p;
                     $scope.showing.searchloading = false;
-                    $scope.mayLoadMore = true;
                     $rootScope.$digest();
 
                     modalProgress.dismiss();
