@@ -18,7 +18,7 @@ angular.module('patientPickerApp', ['ui.router', 'ngSanitize', 'ui.bootstrap', '
         })
 
         .state('resolve-launch', {
-            url: '/resolve/launch/:iss/for/:launch_uri/with/:context_params/and/:patients/then/:endpoint',
+            url: '/resolve/launch/:iss/for/:launch_uri/with/:context_params/and/:patients/show/:show_patient_id/then/:endpoint',
             templateUrl:'static/js/templates/resolve.html'
         });
     });

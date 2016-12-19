@@ -99,14 +99,18 @@ angular.module('patientPickerApp.controllers', []).controller('navController',
 
             fhirApiServices.queryResourceInstances("Patient", $scope.patientQuery, $scope.tokens, sortValues, 10)
                 .then(function (p, queryResult) {
-                    lastQueryResult = queryResult;
-                    if (thisLoad < loadCount) {   // not sure why this is needed (pp)
-                        return;
+                    if (queryResult.data.entry.length === 1) {
+                        $scope.onSelected(queryResult.data.entry[0]);
+                    } else {
+                        lastQueryResult = queryResult;
+                        if (thisLoad < loadCount) {   // not sure why this is needed (pp)
+                            return;
+                        }
+                        $scope.patients = p;
+                        $scope.showing.searchloading = false;
+                        $scope.count = fhirApiServices.calculateResultSet(queryResult);
+                        $rootScope.$digest();
                     }
-                    $scope.patients = p;
-                    $scope.showing.searchloading = false;
-                    $scope.count = fhirApiServices.calculateResultSet(queryResult);
-                    $rootScope.$digest();
 
                     modalProgress.dismiss();
                 });
@@ -156,20 +160,7 @@ angular.module('patientPickerApp.controllers', []).controller('navController',
         };
 
         $scope.patientQuery = undefined;
-
-        function parseContextParams(contextParams) {
-            var decoded = decodeURIComponent(contextParams);
-            var paramPairs = decoded.split(",");
-            var map = {};
-            for (var i = 0; i < paramPairs.length; i++) {
-                var parts = paramPairs[i].split('=');
-                map[parts[0]] = parts[1];
-            }
-            return map;
-        }
-
-        var showPatientIdStr = parseContextParams($stateParams.context_params)["show_patient_id"];
-        $scope.showPatientId = (showPatientIdStr != null && showPatientIdStr == "true");
+        $scope.showPatientId = ($stateParams.show_patient_id !== undefined && $stateParams.show_patient_id === "true");
 
         if (fhirApiServices.clientInitialized()) {
             // all is good
