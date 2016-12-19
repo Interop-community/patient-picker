@@ -35,6 +35,8 @@ angular.module('patientPickerApp.controllers', []).controller('navController',
         $scope.searchterm = "";
         var lastQueryResult;
 
+        $scope.count = {start: 0, end: 0, total: 0};
+
         $rootScope.$on('set-loading', function () {
             $scope.showing.searchloading = true;
         });
@@ -47,6 +49,7 @@ angular.module('patientPickerApp.controllers', []).controller('navController',
                 lastQueryResult = queryResult;
                 $scope.patients = p;
                 $scope.showing.searchloading = false;
+                $scope.count = fhirApiServices.calculateResultSet(queryResult);
                 $rootScope.$digest();
 
                 modalProgress.dismiss();
@@ -102,6 +105,7 @@ angular.module('patientPickerApp.controllers', []).controller('navController',
                     }
                     $scope.patients = p;
                     $scope.showing.searchloading = false;
+                    $scope.count = fhirApiServices.calculateResultSet(queryResult);
                     $rootScope.$digest();
 
                     modalProgress.dismiss();

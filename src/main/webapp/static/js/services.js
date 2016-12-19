@@ -170,6 +170,86 @@ angular.module('patientPickerApp.services', [])
                     });
                 return deferred;
             },
+            //NOTE: This is FHIR implementation specific.
+            // Next, Prev and Self link impls are not defined in the FHIR spec
+            calculateResultSet: function(lastSearch) {
+                var count = {start: 0, end: 0, total: 0};
+                count.total = lastSearch.data.total;
+                var pageSize;
+                var hasNext = this.hasNext(lastSearch);
+
+                if (this.hasNext(lastSearch)) {
+                    lastSearch.data.link.forEach(function (link) {
+                        if (link.relation == "next") {
+                            var querySting = decodeURIComponent(link.url).split("?");
+                            var paramPairs = querySting[1].split("&");
+                            for (var i = 0; i < paramPairs.length; i++) {
+                                var parts = paramPairs[i].split('=');
+                                if (parts[0] === "_count") {
+                                    pageSize = Number(parts[1]);
+                                }
+                            }
+                        }
+                    });
+                    lastSearch.data.link.forEach(function(link) {
+                        if (link.relation == "next") {
+                            var querySting = decodeURIComponent(link.url).split("?");
+                            var paramPairs = querySting[1].split("&");
+                            for (var i = 0; i < paramPairs.length; i++) {
+                                var parts = paramPairs[i].split('=');
+                                if (parts[0] === "_getpagesoffset") {
+                                    if (Number(parts[1]) === pageSize) {
+                                        count.start = 1;
+                                    } else {
+                                        count.start = Number(parts[1]) - pageSize + 1;
+                                    }
+                                    if ((Number(parts[1]) + pageSize) != count.total) {
+                                        count.end = Number(parts[1]);
+                                    } else {
+                                        count.end = count.total;
+                                    }
+                                }
+                            }
+                        }
+                    });
+                } else {
+                    lastSearch.data.link.forEach(function (link) {
+                        if (link.relation == "self") {
+                            var querySting = decodeURIComponent(link.url).split("?");
+                            var paramPairs = querySting[1].split("&");
+                            for (var i = 0; i < paramPairs.length; i++) {
+                                var parts = paramPairs[i].split('=');
+                                if (parts[0] === "_count") {
+                                    pageSize = Number(parts[1]);
+                                }
+                            }
+                        }
+                    });
+                    lastSearch.data.link.forEach(function(link) {
+                        if (link.relation == "self") {
+                            var querySting = decodeURIComponent(link.url).split("?");
+                            var paramPairs = querySting[1].split("&");
+                            for (var i = 0; i < paramPairs.length; i++) {
+                                var parts = paramPairs[i].split('=');
+                                if (parts[0] === "_getpagesoffset") {
+                                    if (Number(parts[1]) === 0) {
+                                        count.start = 1;
+                                    } else {
+                                        count.start = Number(parts[1]) + 1;
+                                    }
+                                    if ((Number(parts[1]) + pageSize) < count.total) {
+                                        count.end = Number(parts[1]) + pageSize;
+                                    } else {
+                                        count.end = count.total;
+                                    }
+                                }
+                            }
+                        }
+                    });
+                }
+
+                return count;
+            },
             readResourceInstance: function(resource, id) {
                 var deferred = $.Deferred();
 
@@ -234,7 +314,7 @@ angular.module('patientPickerApp.services', [])
     };
 
 }).factory('branded', ['brandedText', 'envInfo',function(brandedText, envInfo)  {
-    var text = brandedText["smart"];
+    var text = brandedText["hspc"];
     if (envInfo.hostOrg !== undefined && envInfo.hostOrg !== "null") {
         text = brandedText[envInfo.hostOrg];
     }
