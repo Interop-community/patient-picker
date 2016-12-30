@@ -313,10 +313,6 @@ angular.module('patientPickerApp.services', [])
         }
     };
 
-}).factory('branded', ['brandedText', 'envInfo',function(brandedText, envInfo)  {
-    var text = brandedText["hspc"];
-    if (envInfo.hostOrg !== undefined && envInfo.hostOrg !== "null") {
-        text = brandedText[envInfo.hostOrg];
-    }
-    return text;
+}).factory('branded', ['brandedText', 'envInfo',function(brandedText)  {
+    return brandedText["branded"];
 }]);
