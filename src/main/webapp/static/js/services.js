@@ -313,6 +313,6 @@ angular.module('patientPickerApp.services', [])
         }
     };
 
-}).factory('branded', ['brandedText', 'envInfo',function(brandedText)  {
+}).factory('branded', ['brandedText',function(brandedText)  {
     return brandedText["branded"];
 }]);
