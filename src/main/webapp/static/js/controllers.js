@@ -170,13 +170,13 @@ angular.module('patientPickerApp.controllers', []).controller('navController',
             fhirApiServices.initClient();
         }
 
-        $scope.clientName = decodeURIComponent($stateParams.clientName)
+        $scope.clientName = decodeURIComponent(decodeURIComponent($stateParams.clientName))
             .replace(/\+/, " ");
 
         if ($stateParams.patients !== undefined) {
             $scope.selected.preLaunch = true;
             $scope.patientQuery = {};
-            var queryString = decodeURIComponent($stateParams.patients);
+            var queryString = decodeURIComponent(decodeURIComponent($stateParams.patients));
             if (queryString !== "none") {
                 // For now the query should only be a Patient query.
                 // In the future this query maybe more complex ex. Observations with high blood pressure, where
@@ -190,7 +190,7 @@ angular.module('patientPickerApp.controllers', []).controller('navController',
                     });
                 }
             } else {
-                var to = decodeURIComponent($stateParams.endpoint);
+                var to = decodeURIComponent(decodeURIComponent($stateParams.endpoint));
                 return window.location = to + "?patient_id=none&iss=" + $stateParams.iss + "&launch_uri=" + $stateParams.launch_uri + "&context_params=" + $stateParams.context_params;
             }
         }
@@ -201,14 +201,14 @@ angular.module('patientPickerApp.controllers', []).controller('navController',
 
                 // Pre Launch is for the mock launch flow
                 if ($scope.selected.preLaunch) {
-                    var to = decodeURIComponent($stateParams.endpoint);
+                    var to = decodeURIComponent(decodeURIComponent($stateParams.endpoint));
                     return window.location = to + "?patient_id=" + pid + "&iss=" + $stateParams.iss + "&launch_uri=" + $stateParams.launch_uri + "&context_params=" + $stateParams.context_params;
                 } else {
 
                     fhirApiServices
                         .registerContext({client_id: client_id}, {patient: pid})
                         .then(function (c) {
-                            var to = decodeURIComponent($stateParams.endpoint);
+                            var to = decodeURIComponent(decodeURIComponent($stateParams.endpoint));
                             to = to.replace(/scope=/, "launch=" + c.launch_id + "&scope=");
                             return window.location = to;
                         });
