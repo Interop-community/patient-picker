@@ -100,7 +100,7 @@ angular.module('patientPickerApp.controllers', []).controller('navController',
             fhirApiServices.queryResourceInstances("Patient", $scope.patientQuery, $scope.tokens, sortValues, 10)
                 .then(function (p, queryResult) {
                     if (queryResult.data.entry.length === 1) {
-                        $scope.onSelected(queryResult.data.entry[0]);
+                        $scope.onSelected(queryResult.data.entry[0].resource);
                     } else {
                         lastQueryResult = queryResult;
                         if (thisLoad < loadCount) {   // not sure why this is needed (pp)
