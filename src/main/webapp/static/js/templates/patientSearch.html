@@ -70,7 +70,7 @@
                         </tr>
                         </thead>
                         <tr class="patient-row" ng-click="select($index)" ng-repeat="patient in patients"
-                            ng-class="{selected : patient === selected.selectedPatient}">
+                            ng-class="{selected : patient === selected.selectedPatient}" style="cursor: pointer">
                             <td ng-show="showPatientId">
                                 <span ng-bind="patient.id"></span>
                             </td>
