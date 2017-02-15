@@ -181,7 +181,7 @@ angular.module('patientPickerApp.controllers', []).controller('navController',
                 // For now the query should only be a Patient query.
                 // In the future this query maybe more complex ex. Observations with high blood pressure, where
                 // we would display the Patient who are references in the Observations
-                if (queryString.startsWith("Patient?")) {
+                if (queryString.indexOf("Patient?") === 0) {
                     queryString = queryString.substr("Patient?".length);
                     var queryItems = queryString.split("&");
                     angular.forEach(queryItems, function (item) {
