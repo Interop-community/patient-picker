@@ -44,6 +44,7 @@ angular.module('patientPickerApp.controllers', []).controller('navController',
         $scope.loadMore = function (direction) {
             $scope.showing.searchloading = true;
             var modalProgress = openModalProgressDialog("Searching...");
+            $scope.shouldBeOpen = false;
 
             fhirApiServices.getNextOrPrevPage(direction, lastQueryResult).then(function (p, queryResult) {
                 lastQueryResult = queryResult;
@@ -53,6 +54,7 @@ angular.module('patientPickerApp.controllers', []).controller('navController',
                 $rootScope.$digest();
 
                 modalProgress.dismiss();
+                $scope.shouldBeOpen = true;
             });
         };
 
@@ -96,6 +98,7 @@ angular.module('patientPickerApp.controllers', []).controller('navController',
             }
 
             var modalProgress = openModalProgressDialog("Searching...");
+            $scope.shouldBeOpen = false;
 
             fhirApiServices.queryResourceInstances("Patient", $scope.patientQuery, $scope.tokens, sortValues, 10)
                 .then(function (p, queryResult) {
@@ -113,6 +116,7 @@ angular.module('patientPickerApp.controllers', []).controller('navController',
                     }
 
                     modalProgress.dismiss();
+                    $scope.shouldBeOpen = true;
                 });
         }, 600);
 
