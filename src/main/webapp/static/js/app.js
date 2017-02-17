@@ -21,4 +21,19 @@ angular.module('patientPickerApp', ['ui.router', 'ngSanitize', 'ui.bootstrap', '
             url: '/resolve/launch/:iss/for/:launch_uri/with/:context_params/and/:patients/show/:show_patient_id/then/:endpoint',
             templateUrl:'static/js/templates/resolve.html'
         });
+
+    var re = /^\?path=(.+)/i;
+
+    $urlRouterProvider.rule(function ($injector, $location) {
+        // what this function returns will be set as the $location.url
+        var path = window.location.search;
+        var matches = path.match(re);
+        if (matches) {
+            console.log(matches);
+            path = matches[1];
+            return path;
+        }
     });
+
+
+});

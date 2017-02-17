@@ -93,7 +93,7 @@ angular.module('patientPickerApp.services', [])
                 } else if ($stateParams.iss){
                     oauth2.authorize({
                         "name": "OAuth server issuing launch context request",
-                        "serviceUrl": decodeURIComponent($stateParams.iss)
+                        "serviceUrl": decodeURIComponent(decodeURIComponent($stateParams.iss))
                     });
                 }
             },
