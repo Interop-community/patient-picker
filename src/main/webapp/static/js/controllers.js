@@ -29,6 +29,7 @@ angular.module('patientPickerApp.controllers', []).controller('navController',
         $scope.sortMap.set("age", [['birthdate', inverse]]);
         $scope.sortSelected = "name";
         $scope.sortReverse = false;
+        $scope.shouldBeOpen = true;
 
         $scope.patients = [];
         $scope.genderglyph = {"female": "&#9792;", "male": "&#9794;"};
@@ -44,7 +45,6 @@ angular.module('patientPickerApp.controllers', []).controller('navController',
         $scope.loadMore = function (direction) {
             $scope.showing.searchloading = true;
             var modalProgress = openModalProgressDialog("Searching...");
-            $scope.shouldBeOpen = false;
 
             fhirApiServices.getNextOrPrevPage(direction, lastQueryResult).then(function (p, queryResult) {
                 lastQueryResult = queryResult;
@@ -54,7 +54,6 @@ angular.module('patientPickerApp.controllers', []).controller('navController',
                 $rootScope.$digest();
 
                 modalProgress.dismiss();
-                $scope.shouldBeOpen = true;
             });
         };
 
@@ -98,11 +97,9 @@ angular.module('patientPickerApp.controllers', []).controller('navController',
             }
 
             var modalProgress = openModalProgressDialog("Searching...");
-            $scope.shouldBeOpen = false;
-
             fhirApiServices.queryResourceInstances("Patient", $scope.patientQuery, $scope.tokens, sortValues, 10)
                 .then(function (p, queryResult) {
-                    if (queryResult.data.entry.length === 1) {
+                    if (queryResult.data.entry.length === 1 && $scope.onePatient) {
                         $scope.onSelected(queryResult.data.entry[0].resource);
                     } else {
                         lastQueryResult = queryResult;
@@ -116,7 +113,6 @@ angular.module('patientPickerApp.controllers', []).controller('navController',
                     }
 
                     modalProgress.dismiss();
-                    $scope.shouldBeOpen = true;
                 });
         }, 600);
 
@@ -163,6 +159,7 @@ angular.module('patientPickerApp.controllers', []).controller('navController',
             preLaunch: false
         };
 
+        $scope.onePatient = false;
         $scope.patientQuery = undefined;
         $scope.showPatientId = ($stateParams.show_patient_id !== undefined && $stateParams.show_patient_id === "true");
 
@@ -191,6 +188,12 @@ angular.module('patientPickerApp.controllers', []).controller('navController',
                     angular.forEach(queryItems, function (item) {
                         var parts = item.split("=");
                         $scope.patientQuery[parts[0]] = parts[1];
+                        if (parts[0] === "_id") {
+                            var pCount = parts[1].split(",");
+                            if (pCount === 1){
+                                $scope.onePatient = true;
+                            }
+                        }
                     });
                 }
             } else {
