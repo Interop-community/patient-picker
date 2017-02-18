@@ -190,7 +190,7 @@ angular.module('patientPickerApp.controllers', []).controller('navController',
                         $scope.patientQuery[parts[0]] = parts[1];
                         if (parts[0] === "_id") {
                             var pCount = parts[1].split(",");
-                            if (pCount === 1){
+                            if (pCount.length === 1){
                                 $scope.onePatient = true;
                             }
                         }
