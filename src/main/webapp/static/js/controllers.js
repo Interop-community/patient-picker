@@ -99,7 +99,7 @@ angular.module('patientPickerApp.controllers', []).controller('navController',
             var modalProgress = openModalProgressDialog("Searching...");
             fhirApiServices.queryResourceInstances("Patient", $scope.patientQuery, $scope.tokens, sortValues, 10)
                 .then(function (p, queryResult) {
-                    if (queryResult.data.entry.length === 1 && $scope.onePatient) {
+                    if (queryResult.data.entry && queryResult.data.entry.length === 1 && $scope.onePatient) {
                         $scope.onSelected(queryResult.data.entry[0].resource);
                     } else {
                         lastQueryResult = queryResult;
