@@ -16,10 +16,20 @@ angular.module('patientPickerApp.filters', []).filter('formatAttribute', functio
             var patientName = p && p.name && p.name[0];
             if (!patientName) return null;
 
+            // FHIR 3.0 updated family names to be 0..1 instead of 0..*
+            if(!Array.isArray(patientName.family)){
+                patientName.family = [patientName.family];
+            }
+
             return patientName.given.join(" ") + " " + patientName.family.join(" ");
         } else {
             var practitionerName = p && p.name;
             if (!practitionerName) return null;
+
+            // FHIR 3.0 updated family names to be 0..1 instead of 0..*
+            if(!Array.isArray(practitionerName.family)){
+                practitionerName.family = [practitionerName.family];
+            }
 
             var practitioner = practitionerName.given.join(" ") + " " + practitionerName.family.join(" ");
             if (practitionerName.suffix) {
@@ -34,10 +44,20 @@ angular.module('patientPickerApp.filters', []).filter('formatAttribute', functio
             var patientName = p && p.name && p.name[0];
             if (!patientName) return null;
 
+            // FHIR 3.0 updated family names to be 0..1 instead of 0..*
+            if(!Array.isArray(patientName.family)){
+                patientName.family = [patientName.family];
+            }
+
             return patientName.family.join(" ") + ", " + patientName.given.join(" ");
         } else {
             var practitionerName = p && p.name;
             if (!practitionerName) return null;
+
+            // FHIR 3.0 updated family names to be 0..1 instead of 0..*
+            if(!Array.isArray(practitionerName.family)){
+                practitionerName.family = [practitionerName.family];
+            }
 
             var practitioner = practitionerName.family.join(" ") + ", " + practitionerName.given.join(" ");
             if (practitionerName.suffix) {
