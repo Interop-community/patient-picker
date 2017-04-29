@@ -3,8 +3,8 @@
 
     <parent>
         <groupId>org.hspconsortium.release</groupId>
-        <artifactId>hspc-release</artifactId>
-        <version>0.6</version>
+        <artifactId>hspc-release-spring-boot</artifactId>
+        <version>0.8</version>
     </parent>
 
     <groupId>org.hspconsortium.sandbox</groupId>
@@ -16,6 +16,13 @@
     <description>Patient Picker Tool</description>
     <url>https://healthservices.atlassian.net/wiki/display/HSPC/Healthcare+Services+Platform+Consortium</url>
 
+    <properties>
+        <java.version>1.8</java.version>
+        <springboot_jar.skip>false</springboot_jar.skip>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    </properties>
+
     <scm>
         <connection>scm:git:ssh://git@bitbucket.org/hspconsortium/patient-picker.git</connection>
         <developerConnection>scm:git:ssh://git@bitbucket.org/hspconsortium/patient-picker.git</developerConnection>
@@ -23,34 +30,23 @@
         <tag>HEAD</tag>
     </scm>
 
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    </properties>
-
     <dependencies>
-        <!-- for CORS filter -->
+        <!-- Spring boot -->
         <dependency>
-            <groupId>org.apache.tomcat</groupId>
-            <artifactId>tomcat-catalina</artifactId>
-            <version>8.0.33</version>
-            <scope>provided</scope>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
     </dependencies>
 
     <build>
-        <finalName>${project.artifactId}</finalName>
         <plugins>
             <plugin>
-                <artifactId>maven-failsafe-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>integration-test</goal>
-                            <goal>verify</goal>
-                        </goals>
-                    </execution>
-                </executions>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <!-- Make the executable jar optional -->
+                    <skip>${springboot_jar.skip}</skip>
+                </configuration>
             </plugin>
         </plugins>
     </build>
