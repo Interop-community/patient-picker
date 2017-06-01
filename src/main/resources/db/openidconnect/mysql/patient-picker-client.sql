@@ -8,7 +8,7 @@ INSERT INTO client_details (client_id, client_name, access_token_validity_second
   ('patient_picker', 'Patient Picker', 86400, 'NONE');
 
 INSERT INTO client_redirect_uri (owner_id, redirect_uri) VALUES
-  ((SELECT id from client_details where client_id = 'patient_picker'), 'http://localhost:8080/hspc-patient-picker'),
+  ((SELECT id from client_details where client_id = 'patient_picker'), 'http://localhost:9094'),
   ((SELECT id from client_details where client_id = 'patient_picker'), 'https://apps.hspconsortium.org/hspc-patient-picker');
 
 INSERT INTO client_scope (owner_id, scope) VALUES
