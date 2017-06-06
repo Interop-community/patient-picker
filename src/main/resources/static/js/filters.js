@@ -11,60 +11,55 @@ angular.module('patientPickerApp.filters', []).filter('formatAttribute', functio
         }
     };
 }).filter('nameGivenFamily', function () {
-    return function (p) {
-        if (p.resourceType === "Patient") {
-            var patientName = p && p.name && p.name[0];
-            if (!patientName) return null;
+    return function(p){
+        var isArrayName = p && p.name && p.name[0];
+        var personName;
 
-            // FHIR 3.0 updated family names to be 0..1 instead of 0..*
-            if(!Array.isArray(patientName.family)){
-                patientName.family = [patientName.family];
-            }
+        if (isArrayName) {
+            personName = p && p.name && p.name[0];
+            if (!personName) return null;
 
-            return patientName.given.join(" ") + " " + patientName.family.join(" ");
         } else {
-            var practitionerName = p && p.name;
-            if (!practitionerName) return null;
-
-            // FHIR 3.0 updated family names to be 0..1 instead of 0..*
-            if(!Array.isArray(practitionerName.family)){
-                practitionerName.family = [practitionerName.family];
-            }
-
-            var practitioner = practitionerName.given.join(" ") + " " + practitionerName.family.join(" ");
-            if (practitionerName.suffix) {
-                practitioner = practitioner + ", " + practitionerName.suffix.join(", ");
-            }
-            return practitioner;
+            personName = p && p.name;
+            if (!personName) return null;
         }
+
+        var user;
+        if (Object.prototype.toString.call(personName.family) === '[object Array]') {
+            user = personName.given.join(" ") + " " + personName.family.join(" ");
+        } else {
+            user = personName.given.join(" ") + " " + personName.family;
+        }
+        if (personName.suffix) {
+            user = user + ", " + personName.suffix.join(", ");
+        }
+        return user;
     };
 }).filter('nameFamilyGiven', function () {
-    return function (p) {
-        if (p.resourceType === "Patient") {
-            var patientName = p && p.name && p.name[0];
-            if (!patientName) return null;
+    return function(p){
+        var isArrayName = p && p.name && p.name[0];
+        var personName;
 
-            // FHIR 3.0 updated family names to be 0..1 instead of 0..*
-            if(!Array.isArray(patientName.family)){
-                patientName.family = [patientName.family];
-            }
+        if (isArrayName) {
+            personName = p && p.name && p.name[0];
+            if (!personName) return null;
 
-            return patientName.family.join(" ") + ", " + patientName.given.join(" ");
         } else {
-            var practitionerName = p && p.name;
-            if (!practitionerName) return null;
-
-            // FHIR 3.0 updated family names to be 0..1 instead of 0..*
-            if(!Array.isArray(practitionerName.family)){
-                practitionerName.family = [practitionerName.family];
-            }
-
-            var practitioner = practitionerName.family.join(" ") + ", " + practitionerName.given.join(" ");
-            if (practitionerName.suffix) {
-                practitioner = practitioner + ", " + practitionerName.suffix.join(", ");
-            }
-            return practitioner;
+            personName = p && p.name;
+            if (!personName) return null;
         }
+
+        var user;
+        if (Object.prototype.toString.call(personName.family) === '[object Array]') {
+            user = personName.family.join(" ") + ", " + personName.given.join(" ");
+        } else {
+            user = personName.family + ", " + personName.given.join(" ");
+        }
+        if (personName.suffix) {
+            user = user + ", " + personName.suffix.join(", ");
+        }
+
+        return user;
     };
 }).filter('ageFilter', function () {
     return function(dob) {
