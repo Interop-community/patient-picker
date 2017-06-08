@@ -129,7 +129,7 @@ angular.module('patientPickerApp.controllers', []).controller('navController',
         function openModalProgressDialog(title) {
             return $uibModal.open({
                 animation: true,
-                templateUrl: 'static/js/templates/progressModal.html',
+                templateUrl: 'js/templates/progressModal.html',
                 controller: 'ProgressModalCtrl',
                 size: 'sm',
                 resolve: {

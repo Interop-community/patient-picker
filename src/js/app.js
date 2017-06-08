@@ -9,17 +9,17 @@ angular.module('patientPickerApp', ['ui.router', 'ngSanitize', 'ui.bootstrap', '
         
         .state('after-auth', {
             url: '/after-auth',
-            templateUrl:'static/js/templates/after-auth.html'
+            templateUrl:'js/templates/after-auth.html'
         })
 
         .state('resolve', {
             url: '/resolve/:context/against/:iss/for/:clientName/then/:endpoint',
-            templateUrl:'static/js/templates/resolve.html'
+            templateUrl:'js/templates/resolve.html'
         })
 
         .state('resolve-launch', {
             url: '/resolve/launch/:iss/for/:launch_uri/with/:context_params/and/:patients/show/:show_patient_id/then/:endpoint',
-            templateUrl:'static/js/templates/resolve.html'
+            templateUrl:'js/templates/resolve.html'
         });
 
     var re = /^\?path=(.+)/i;

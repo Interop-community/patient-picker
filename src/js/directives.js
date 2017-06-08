@@ -217,7 +217,7 @@ angular.module('patientPickerApp.directives', []).directive('resize', function (
 }]).directive("scrollableTable", function () {
         return {
             restrict: 'E',
-            templateUrl: 'static/js/templates/scrollableTable.html'
+            templateUrl: 'js/templates/scrollableTable.html'
         };
     }).directive('notification', function($timeout, $compile){
 
