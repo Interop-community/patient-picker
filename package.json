@@ -2,7 +2,7 @@
   "name": "patient-picker",
   "version": "1.0.1",
   "scripts": {
-    "serve": "./node_modules/http-server/bin/http-server src -p 8094"
+    "serve": "./node_modules/http-server/bin/http-server src -p 8094 --cors"
   },
   "dependencies": {
   },
