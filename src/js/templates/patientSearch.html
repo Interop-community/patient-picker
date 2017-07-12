@@ -95,7 +95,7 @@
             <div class="col-md-12 content-column">
                 <div ng-show="hasPrev() || hasNext()" style="text-align: center">Showing {{count.start}} to {{count.end}} of {{count.total}}</div>
                 <div ng-show="hasPrev()" class="btn btn-basic btn-md" style="float: left" ng-click="loadMore('prevPage')"><i class="fa fa-chevron-left fa-lg"></i> Prev</div>
-                <div ng-show="hasNext()" class="btn btn-basic btn-md" style="float: right" ng-click="loadMore('nextPage')"><i class="fa fa-chevron-right fa-lg"></i> Next</div>
+                <div ng-show="hasNext()" class="btn btn-basic btn-md" style="float: right" ng-click="loadMore('nextPage')">Next <i class="fa fa-chevron-right fa-lg"></i></div>
             </div>
 
         </div>
