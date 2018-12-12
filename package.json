@@ -1,6 +1,6 @@
 {
   "name": "patient-picker",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "scripts": {
     "serve": "./node_modules/http-server/bin/http-server src -p 8094 --cors"
   },
@@ -8,5 +8,9 @@
   },
   "devDependencies": {
     "http-server": "^0.10.0"
+  },
+  "config": {
+    "port": 8094,
+    "memory": "100"
   }
 }
