@@ -1,13 +1,13 @@
 {
-  "family": "patient-data-manager-test",
+  "family": "patient-picker-test",
   "containerDefinitions": [
     {
-      "name": "patient-data-manager-test",
-      "image": "hspconsortium/patient-data-manager:1.3.1-SNAPSHOT",
+      "name": "patient-picker-test",
+      "image": "hspconsortium/patient-picker:{{PROJECT_VERSION}}",
       "cpu": 0,
       "portMappings": [
         {
-          "containerPort": 8096,
+          "containerPort": 8094,
           "hostPort": 0,
           "protocol": "tcp"
         }
@@ -16,7 +16,7 @@
       "logConfiguration": {
         "logDriver": "awslogs",
         "options": {
-          "awslogs-group": "/ecs/patient-data-manager-test",
+          "awslogs-group": "/ecs/patient-picker-test",
           "awslogs-region": "us-west-2",
           "awslogs-stream-prefix": "ecs"
         }
