@@ -58,26 +58,26 @@ pipelines:
             - . ci-3-docker-image.sh
           artifacts:
             - aws/task-definition.json
-      - step:
-          name: update the aws task definition
-          caches:
-            - node
-          script:
-            - export TARGET_ENV=prod
-            - cd ci
-            - . ci-0-set-properties.sh
-            - . ci-4-aws-task-update.sh
-      - step:
-          name: update the aws service
-          deployment: production
-          trigger: manual
-          caches:
-            - node
-          script:
-            - export TARGET_ENV=prod
-            - cd ci
-            - . ci-0-set-properties.sh
-            - . ci-5-aws-service-update.sh
+#      - step:
+#          name: update the aws task definition
+#          caches:
+#            - node
+#          script:
+#            - export TARGET_ENV=prod
+#            - cd ci
+#            - . ci-0-set-properties.sh
+#            - . ci-4-aws-task-update.sh
+#      - step:
+#          name: update the aws service
+#          deployment: production
+#          trigger: manual
+#          caches:
+#            - node
+#          script:
+#            - export TARGET_ENV=prod
+#            - cd ci
+#            - . ci-0-set-properties.sh
+#            - . ci-5-aws-service-update.sh
     feature/*:
       - step:
           name: build the source code
