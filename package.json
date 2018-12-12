@@ -1,6 +1,6 @@
 {
   "name": "patient-picker",
-  "version": "1.0.3",
+  "version": "1.0.4-SNAPSHOT",
   "scripts": {
     "serve": "./node_modules/http-server/bin/http-server src -p 8094 --cors"
   },
