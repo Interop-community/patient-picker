@@ -1,5 +1,9 @@
-FROM node:alpine
+FROM sameersbn/nginx:1.10.3
 
-COPY . .
-RUN npm install
-CMD [ "npm", "run", "serve" ]
+COPY ./docker/includes/nginx/config /etc/nginx
+COPY ./build /usr/share/nginx/html/
+#FROM node:alpine
+
+#COPY . .
+#RUN npm install
+#CMD [ "npm", "run", "serve" ]
