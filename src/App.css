@@ -1,0 +1,119 @@
+.App {
+    text-align: center;
+}
+
+.App-logo {
+    height: 32px;
+    width: auto;
+    float: left;
+    display: inline-block;
+    left: 60px;
+    top: 10px;
+    position: absolute;
+}
+
+.App-content {
+    min-height: calc(100vh - 50px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(10px + 2vmin);
+}
+
+.App-content > label {
+    margin: 1rem 0;
+    font-size: 1.3rem;
+}
+
+.App-content button {
+    margin-top: 2rem;
+    width: 150px;
+    height: 30px;
+    background-color: #10759D;
+    border: none;
+    color: white;
+}
+
+.App-content button:disabled {
+    background-color: #79a1b1;
+}
+
+.App-link {
+    color: #61dafb;
+}
+
+.persona-card {
+    width: 180px;
+    height: 180px;
+    overflow: hidden;
+    padding: 16px;
+    box-sizing: border-box;
+    font-size: 18px;
+    display: inline-block;
+    margin: 16px;
+}
+
+.persona-card:hover {
+    cursor: pointer;
+}
+
+.icon {
+    width: 60px;
+    height: 60px;
+    margin-bottom: 8px;
+}
+
+.patient.icon {
+    fill: rgb(14, 86, 118);
+}
+
+.practitioner.icon path {
+    fill: rgb(157, 0, 114) !important;
+}
+
+.fa-mars {
+    color: rgb(14, 86, 118);
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.fa-venus {
+    color: rgb(157, 0, 114);
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.patient-picker-wrapper {
+    width: 700px;
+    overflow: hidden;
+}
+
+.persona-table-wrapper {
+    height: 60vh;
+    overflow: auto;
+    border-radius: 10px;
+    border: 1px solid whitesmoke;
+}
+
+.persona-table-wrapper tbody tr:hover {
+    cursor: pointer;
+    background-color: whitesmoke;
+}
+
+.persona-table-header {
+    background-color: rgb(245, 245, 245);
+}
+
+.filter {
+    margin-bottom: 16px !important;
+}
+
+@keyframes App-logo-spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}

@@ -11,3 +11,5 @@ jq "(.containerDefinitions[0].environment[] | select(.name == \"TARGET_ENV\") | 
 jq ".containerDefinitions[0].memoryReservation=(${AWS_CONTAINER_MEMORY_RESERVE} | tonumber)" ${TEMPLATE_FILE} > tmp.json && mv tmp.json ${TEMPLATE_FILE}
 
 cat ${TEMPLATE_FILE}
+
+npm install

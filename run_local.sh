@@ -2,4 +2,4 @@
 
 echo "starting patient-picker..."
 npm install
-npm run serve
+npm run start

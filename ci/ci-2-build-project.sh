@@ -1,5 +1,11 @@
 #!/usr/bin/env bash
 
-set -x
+echo "::: STARTING THE BUILD"
 
-echo "nothing to do"
+npm run build:${TARGET_ENV}
+
+echo "::: BUILD ENDED"
+
+
+#set -x
+#echo "nothing to do"
