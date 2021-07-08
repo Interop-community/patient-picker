@@ -4,8 +4,8 @@ export default {
     "sessionStorageName": "hspcAuthorized",
     "sessionCookieName": "JSESSIONID",
     "personaCookieName": "hspc-persona-token",
-    "authServerUrl": "https://sandbox-api.logicahealth.org",
-    "cookieDomain": "logicahealth.org"
+    "authServerUrl": "https://auth.interop.community",
+    "cookieDomain": "interop.community"
   },
   "dev": {
     "localCookieName": "hspc-picker-start-route",
@@ -22,13 +22,5 @@ export default {
     "personaCookieName": "hspc-persona-token",
     "authServerUrl": "http://localhost:12000",
     "cookieDomain": "localhost"
-  },
-  "test": {
-    "localCookieName": "hspc-picker-start-route",
-    "sessionStorageName": "hspcAuthorized",
-    "sessionCookieName": "JSESSIONID",
-    "personaCookieName": "hspc-persona-token",
-    "authServerUrl": "https://sandbox-api-test.logicahealth.org",
-    "cookieDomain": "logicahealth.org"
   }
 }
