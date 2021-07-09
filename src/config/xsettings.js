@@ -4,7 +4,7 @@ export default {
     "sessionStorageName": "hspcAuthorized",
     "sessionCookieName": "JSESSIONID",
     "personaCookieName": "hspc-persona-token",
-    "authServerUrl": "https://auth.interop.community",
+    "authServerUrl": "https://sandbox-api.interop.community",
     "cookieDomain": "interop.community"
   },
   "dev": {
