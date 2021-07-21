@@ -4,7 +4,7 @@ import PersonaPicker from "./PersonaPicker";
 import PatientPicker from "./PatientPicker";
 import {withTheme} from "@material-ui/styles";
 import {CircularProgress} from '@material-ui/core';
-import logo from "./hspc-sndbx-logo-white.png";
+import logo from "./Meld Logo.FINAL-14.png";
 import settings from './config/xsettings.js';
 import './App.css';
 
