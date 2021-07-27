@@ -66,7 +66,7 @@ class App extends Component {
 
     render() {
         return <div className="App">
-            <header className="App-header" style={{backgroundColor: "#8A8B8D", height: "50px", overflow: 'hidden'}}>
+            <header className="App-header" style={{backgroundColor: "#C8D0C8", height: "50px", overflow: 'hidden'}}>
                 <img src={logo} className="App-logo" alt="logo"/>
                 <span style={{color: 'white', display: 'inline-block', lineHeight: '50px', fontSize: '2rem'}}>Context Picker</span>
             </header>
