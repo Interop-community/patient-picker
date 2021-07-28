@@ -1,10 +1,10 @@
-export default {
+const Config = {
   "prod": {
     "localCookieName": "hspc-picker-start-route",
     "sessionStorageName": "hspcAuthorized",
     "sessionCookieName": "JSESSIONID",
     "personaCookieName": "hspc-persona-token",
-    "authServerUrl": "https://sandbox-api.interop.community",
+    "authServerUrl": "https://dev-iol2sandboxapi.interop.community",
     "cookieDomain": "interop.community"
   },
   "dev": {
@@ -24,3 +24,5 @@ export default {
     "cookieDomain": "localhost"
   }
 }
+
+export default Config 
