@@ -6,6 +6,7 @@ import {withTheme} from "@material-ui/styles";
 import {CircularProgress} from '@material-ui/core';
 import logo from "./Meld Logo.FINAL-14.png";
 import settings from './config/xsettings.js';
+import Config from './config/Config';
 import './App.css';
 
 const cookies = new Cookies();
@@ -106,7 +107,7 @@ class App extends Component {
     };
 
     login = (persona) => {
-        fetch(`${this.state.settings.authServerUrl}/userPersona/authenticate`, {
+        fetch(`${Config.authServerUrl}/userPersona/authenticate`, {
             method: 'POST',
             headers: {
                 Accept: "application/json",
@@ -174,7 +175,7 @@ class App extends Component {
     getPersonas = (iss) => {
         iss = decodeURIComponent(iss);
         let sandboxId = iss.split('/')[3];
-        fetch(`${this.state.settings.authServerUrl}/userPersona?sandboxId=${sandboxId}`, {
+        fetch(`${Config.authServerUrl}/userPersona?sandboxId=${sandboxId}`, {
             headers: {
                 Authorization: `Bearer ${window.smart.tokenResponse.access_token}`,
                 Accept: "application/json",

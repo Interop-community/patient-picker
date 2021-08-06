@@ -1,4 +1,13 @@
-FROM sameersbn/nginx:1.10.3
+FROM node:9.4
 
-COPY ./docker/includes/nginx/config /etc/nginx
-COPY ./build /usr/share/nginx/html/
+WORKDIR /usr/src/app
+
+EXPOSE 5000
+
+RUN npm install -g serve
+
+COPY . .
+
+RUN npm install
+
+CMD ["/usr/src/app/run.sh"]
