@@ -26,4 +26,4 @@ echo "===> Building ..."
 npm run build:prod
 
 echo "===> Running ... "
-exec serve -s build
+exec serve -s build -l 8094
