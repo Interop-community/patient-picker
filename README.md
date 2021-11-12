@@ -1,8 +1,8 @@
-# HSPC Patient Picker
+# Meld Patient Picker
 
 ## Setup
 
-HSPC Patient Picker is hosted as a static web app.
+Meld Patient Picker is hosted as a static web app.
 
 ## Hosting
 ````
