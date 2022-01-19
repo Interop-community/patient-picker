@@ -4,7 +4,7 @@ export default {
     "sessionStorageName": "hspcAuthorized",
     "sessionCookieName": "JSESSIONID",
     "personaCookieName": "hspc-persona-token",
-    "authServerUrl": "https://sandbox-api.interop.community",
+    // "authServerUrl": "https://sandbox-api.interop.community",
     "cookieDomain": "interop.community"
   },
   "dev": {
@@ -12,7 +12,7 @@ export default {
     "sessionStorageName": "hspcAuthorized",
     "sessionCookieName": "JSESSIONID",
     "personaCookieName": "hspc-persona-token",
-    "authServerUrl": "http://localhost:12000",
+    // "authServerUrl": "http://localhost:12000",
     "cookieDomain": "localhost"
   },
   "local": {
@@ -20,7 +20,7 @@ export default {
     "sessionStorageName": "hspcAuthorized",
     "sessionCookieName": "JSESSIONID",
     "personaCookieName": "hspc-persona-token",
-    "authServerUrl": "http://localhost:12000",
+    // "authServerUrl": "http://localhost:12000",
     "cookieDomain": "localhost"
   }
 }
